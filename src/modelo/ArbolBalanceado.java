@@ -20,10 +20,15 @@ public class ArbolBalanceado {
         raiz = null;
         tamaño = 0;
     }
-    public boolean agregar(int dato){
-        boolean inserto=insertar(dato);
+
+    public boolean agregar(int dato) {
+        boolean inserto = insertar(dato);
+        if (inserto) {
+            balancear();
+        }
         return inserto;
     }
+
     private boolean insertar(int dato) {
         //verifica que la raiz tenga datos
         if (raiz == null) {
@@ -60,21 +65,96 @@ public class ArbolBalanceado {
             }
         }
     }
-    // identificar el camino que se debe recorrer para llegar a tal dato
-    public ArrayList<NodoArbolBalanceado>camino (int dato){
-         ArrayList<NodoArbolBalanceado> lista= new ArrayList<>();
-         NodoArbolBalanceado actual = raiz;
-         while(actual!=null){
-             lista.add(actual);
-             if (dato< actual.valor) {
-                 actual= actual.hijoizquierdo;
-             }else if(dato<actual.valor){
-                 actual = actual.hijoderecho;
-             }else{
-                 //romper ciclo
-                 break;
-             }
-         }
-         return lista;
+
+    // identificar el camino que se debe recorrer para llegar a dicho dato, y guardar los nodos que hay en su camino 
+    //con un arraylist que obtiene los nodos de la clase NodoArbolBalanceado
+    public ArrayList<NodoArbolBalanceado> camino(int dato) {
+        ArrayList<NodoArbolBalanceado> lista = new ArrayList<>();
+        NodoArbolBalanceado actual = raiz;
+        while (actual != null) {
+            lista.add(actual);
+            if (dato < actual.valor) {
+                actual = actual.hijoizquierdo;
+            } else if (dato < actual.valor) {
+                actual = actual.hijoderecho;
+            } else {
+                //romper ciclo
+                break;
+            }
+        }
+        if (actual == null) {
+            lista.clear();
+        }
+        return lista;
+    }
+
+    private void balancear() {
+        ArrayList<NodoArbolBalanceado> lista = new ArrayList<>();
+        int indiceUltimo = lista.size() - 1;
+        for (int i = indiceUltimo; i >= 0; i--) {
+            NodoArbolBalanceado A = lista.get(i);
+            // a cada nodo le indica su altura
+            A.actualizaraltura();
+            // busca el padre de cada nodo y se le asigna a la variable padreA
+            NodoArbolBalanceado PadreA;
+
+            if (A == raiz) {
+                PadreA = null;
+            } else {
+                PadreA = lista.get(i - 1);
+            }
+            // verifica se el arbol o el subarbol esta desbalanceado 
+            if (A.factorbalance() == -2) {
+                if (A.hijoizquierdo.factorbalance() <= 0) {
+                    balanceLL(A, PadreA);
+                } else {
+                    balanceLR(A, PadreA);
+                }
+            } else if (A.factorbalance() == 2) {
+                if (A.hijoderecho.factorbalance()>=0) {
+                    balanceRR(A,PadreA);
+                }
+            }
+        }
+    }
+
+    private void balanceLL(NodoArbolBalanceado A, NodoArbolBalanceado padreA) {
+        NodoArbolBalanceado B = A.hijoizquierdo;
+        if (A == raiz) {
+            B = raiz;
+        } else if (padreA.hijoizquierdo == A) {
+            padreA.hijoizquierdo = B;
+        } else {
+            padreA.hijoderecho = B;
+        }
+
+        A.hijoizquierdo = B.hijoderecho;
+        B.hijoizquierdo = A;
+    }
+
+    private void balanceLR(NodoArbolBalanceado A, NodoArbolBalanceado padreA) {
+        NodoArbolBalanceado B = A.hijoizquierdo;
+        NodoArbolBalanceado C = B.hijoderecho;
+
+        if (A == raiz) {
+            B = raiz;
+        } else if (padreA.hijoizquierdo == A) {
+            padreA.hijoizquierdo = C;
+        } else {
+            padreA.hijoderecho = C;
+        }
+        A.hijoizquierdo = C.hijoderecho;
+        A.hijoderecho = C.hijoizquierdo;
+        C.hijoizquierdo = B;
+        C.hijoderecho = A;
+
+        A.actualizaraltura();
+        B.actualizaraltura();
+        C.actualizaraltura();
+
+    }
+
+    private void balanceRR(NodoArbolBalanceado A, NodoArbolBalanceado padreA) {
+
     }
 }

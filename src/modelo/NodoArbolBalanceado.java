@@ -13,6 +13,7 @@ public class NodoArbolBalanceado {
 
     int valor;
     int altura;
+    
     NodoArbolBalanceado hijoizquierdo;
     NodoArbolBalanceado hijoderecho;
 
@@ -21,38 +22,6 @@ public class NodoArbolBalanceado {
         hijoderecho = null;
         hijoizquierdo = null;
         altura = 1;
-    }
-
-    public int getValor() {
-        return valor;
-    }
-
-    public void setValor(int valor) {
-        this.valor = valor;
-    }
-
-    public int getAltura() {
-        return altura;
-    }
-
-    public void setAltura(int altura) {
-        this.altura = altura;
-    }
-
-    public NodoArbolBalanceado getHijoizquierdo() {
-        return hijoizquierdo;
-    }
-
-    public void setHijoizquierdo(NodoArbolBalanceado hijoizquierdo) {
-        this.hijoizquierdo = hijoizquierdo;
-    }
-
-    public NodoArbolBalanceado getHijoderecho() {
-        return hijoderecho;
-    }
-
-    public void setHijoderecho(NodoArbolBalanceado hijoderecho) {
-        this.hijoderecho = hijoderecho;
     }
 
     public boolean EsHoja() {
